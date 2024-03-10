@@ -1,61 +1,67 @@
 export default {
 	loadWords,
-	findWords
+	findWords,
 };
-
 
 // ****************************
 
 var dict = {};
 var isWord = Symbol("is-word");
 
+// Função para carregar palavras
 function loadWords(wordList) {
 	var nodeCount = 0;
 
-	// reset a previously loaded dictionary?
+	// resetar um dicionário previamente carregado?
 	if (Object.keys(dict).length > 0) {
 		dict = {};
 	}
 
-	// construct the dictionary as a trie
+	// construir o dicionário como uma trie
 	for (let word of wordList) {
-		// traverse down the trie (from the root), creating nodes
-		// as necessary
+		// percorrer a trie (a partir da raiz), criando nós
+		// conforme necessário
 		let node = dict;
 		for (let letter of word) {
+			// se o nó atual não tiver a letra, crie um novo nó
 			if (!node[letter]) {
 				node[letter] = {
 					[isWord]: false,
 				};
 				nodeCount++;
 			}
+			// mover para o próximo nó
 			node = node[letter];
 		}
 
-		// mark the terminal node for this word
+		// marcar o nó terminal para esta palavra
 		node[isWord] = true;
 	}
 
+	// retornar o número total de nós criados
 	return nodeCount;
 }
 
-function findWords(input,prefix = "",node = dict) {
+// Função para encontrar palavras
+function findWords(input, prefix = "", node = dict) {
 	var words = [];
 
-	// is the current node the end of a valid word?
+	// o nó atual é o final de uma palavra válida?
 	if (node[isWord]) {
 		words.push(prefix);
 	}
 
+	// percorrer cada letra na entrada
 	for (let i = 0; i < input.length; i++) {
 		let currentLetter = input[i];
 
-		// does the current (sub)trie have a node for this letter?
+		// o (sub)trie atual tem um nó para esta letra?
 		if (node[currentLetter]) {
 			let remainingLetters = [
-				...input.slice(0,i),
-				...input.slice(i + 1)
+				...input.slice(0, i),
+				...input.slice(i + 1),
 			];
+			// adicionar todas as palavras encontradas à lista de palavras
 			words.push(
 				...findWords(
 					remainingLetters,
@@ -66,6 +72,6 @@ function findWords(input,prefix = "",node = dict) {
 		}
 	}
 
-	words = [ ...(new Set(words)) ];
+	// retornar a lista de palavras encontradas
 	return words;
 }
