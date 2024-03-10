@@ -6,6 +6,11 @@ export default {
 // ****************************
 
 var dict = {};
+// Symbol é um tipo de dados primitivo cujo valor é único e imutável.
+// Diferentes símbolos podem ter o mesmo nome de descrição, mas ainda assim serão diferentes se comparados.
+// Symbol é um tipo de dados primitivo nativo do JavaScript.
+//Ele foi introduzido na especificação ECMAScript 2015 (ES6) e é usado para criar identificadores únicos para propriedades de objetos. Cada valor de Symbol é único e imutável.
+// Neste caso, 'isWord' é usado como uma chave de propriedade única para indicar se um nó específico no dicionário representa o final de uma palavra.
 var isWord = Symbol("is-word");
 
 // Função para carregar palavras
